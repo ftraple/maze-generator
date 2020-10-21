@@ -2,11 +2,11 @@
 
 Maze::Maze(int width, int height, int cell_size, int start_x, int start_y)
     : m_width{width}, m_height{height}, m_cell_resolution{cell_size},
-      m_x{start_x}, m_y{start_y}, m_data(width, std::vector<Cell>(height)) {
+      m_position{start_x, start_y}, m_data(width, std::vector<Cell>(height)) {
 
-    m_current = &m_data[m_x][m_y];
+    m_current = &m_data[m_position.x][m_position.y];
     m_current->visited = true;
-    m_path.push({m_x, m_y});
+    m_path.push(m_position);
 }
 
 void Maze::update() {
@@ -16,67 +16,64 @@ void Maze::update() {
 void Maze::generate() {
     auto position = Maze::choose_next_cell();
     if (position) {
-        Cell *next = &m_data[position->first][position->second];
+        Cell *next = &m_data[position->x][position->y];
         next->visited = true;
-
-        if (m_x > position->first) {
+        // Remove walls
+        if (m_position.x > position->x) {
             m_current->left = false;
             next->right = false;
         }
-        if (m_x < position->first) {
+        if (m_position.x < position->x) {
             m_current->right = false;
             next->left = false;
         }
-        if (m_y > position->second) {
+        if (m_position.y > position->y) {
             m_current->top = false;
             next->botton = false;
         }
-        if (m_y < position->second) {
+        if (m_position.y < position->y) {
             m_current->botton = false;
             next->top = false;
         }
-
-        m_x = position->first;
-        m_y = position->second;
+        // Set next cell as the current
+        m_position = *position;
         m_current = next;
-        m_path.push({m_x, m_y});
+        m_path.push(m_position);
     } else {
         if (!m_path.empty()) {
-            std::pair<int, int> position = m_path.top();
-            m_x = position.first;
-            m_y = position.second;
-            m_current = &m_data[m_x][m_y];
+            auto position = m_path.top();
+            m_position.x = position.x;
+            m_position.y = position.y;
+            m_current = &m_data[m_position.x][m_position.y];
             m_path.pop();
         }
     }
 }
 
-std::optional<std::pair<int, int>> Maze::choose_next_cell() {
-
-    std::vector<std::pair<int, int>> next_cell_list;
-
+std::optional<sf::Vector2i> Maze::choose_next_cell() {
+    std::vector<sf::Vector2i> next_cell_list;
     // Check left
-    if (m_x - 1 >= 0) {
-        if (!m_data[m_x - 1][m_y].visited) {
-            next_cell_list.push_back(std::pair{m_x - 1, m_y});
+    if (m_position.x - 1 >= 0) {
+        if (!m_data[m_position.x - 1][m_position.y].visited) {
+            next_cell_list.push_back({m_position.x - 1, m_position.y});
         }
     }
     // Check right
-    if (m_x + 1 < m_width) {
-        if (!m_data[m_x + 1][m_y].visited) {
-            next_cell_list.push_back(std::pair{m_x + 1, m_y});
+    if (m_position.x + 1 < m_width) {
+        if (!m_data[m_position.x + 1][m_position.y].visited) {
+            next_cell_list.push_back({m_position.x + 1, m_position.y});
         }
     }
     // Check top
-    if (m_y - 1 >= 0) {
-        if (!m_data[m_x][m_y - 1].visited) {
-            next_cell_list.push_back(std::pair{m_x, m_y - 1});
+    if (m_position.y - 1 >= 0) {
+        if (!m_data[m_position.x][m_position.y - 1].visited) {
+            next_cell_list.push_back({m_position.x, m_position.y - 1});
         }
     }
     // Check botton
-    if (m_y + 1 < m_height) {
-        if (!m_data[m_x][m_y + 1].visited) {
-            next_cell_list.push_back(std::pair{m_x, m_y + 1});
+    if (m_position.y + 1 < m_height) {
+        if (!m_data[m_position.x][m_position.y + 1].visited) {
+            next_cell_list.push_back({m_position.x, m_position.y + 1});
         }
     }
     // Selected next cell

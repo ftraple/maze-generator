@@ -2,11 +2,11 @@
 #define INCLUDE_MAZE_H_
 
 #include <SFML/Graphics.hpp>
+#include <cstdlib>
+#include <iostream>
+#include <optional>
 #include <stack>
 #include <vector>
-#include <cstdlib>
-#include <optional>
-#include <iostream>
 
 class Maze {
 public:
@@ -28,17 +28,15 @@ private:
     int m_width;
     int m_height;
     int m_cell_resolution;
+    sf::Vector2i m_position{0, 0};
     std::vector<std::vector<Cell>> m_data;
-
     bool is_generated{false};
-    int m_x{0};
-    int m_y{0};
-    Cell* m_current{nullptr};
-    std::stack<std::pair<int, int>> m_path;
+    Cell *m_current{nullptr};
+    std::stack<sf::Vector2i> m_path;
 
     void generate();
 
-    std::optional<std::pair<int, int>> choose_next_cell();
+    std::optional<sf::Vector2i> choose_next_cell();
 };
 
 #endif // INCLUDE_MAZE_H_
