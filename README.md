@@ -2,7 +2,7 @@
 
 Maze generation algorithms are automated methods for the creation of mazes.
 
-[![video](doc/maze-video.png)](https://www.youtube.com/watch?v=HE8Hp206Boc&feature=youtu.be){:target="_blank" rel="noopener"}
+[![video](doc/maze-video.png)](https://www.youtube.com/watch?v=HE8Hp206Boc&feature=youtu.be){:target="_blank"}
 
 
 ## Randomized depth-first search
