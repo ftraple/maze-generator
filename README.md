@@ -1,5 +1,9 @@
 # Maze Generator
 
+Maze generation algorithms are automated methods for the creation of mazes.
+
+![Maze](doc/maze.png)
+
 ## Randomized depth-first search
 
 This algorithm, also known as the "recursive backtracker" algorithm, is a randomized version of the depth-first search algorithm.
