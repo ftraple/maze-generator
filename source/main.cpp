@@ -9,9 +9,9 @@ int main(int argc, char **argv) {
    
     std::srand(std::time(nullptr));
 
-    sf::RenderWindow window(sf::VideoMode(640, 480), "Maze Generator");
+    sf::RenderWindow window(sf::VideoMode(960, 560), "Maze Generator");
 
-    Maze maze(16, 12, 40, 0, 0);
+    Maze maze(24, 14, 40, 0, 0);
 
     while (window.isOpen()) {
 
